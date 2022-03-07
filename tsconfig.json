@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "moduleResolution": "Node",
+      "sourceMap": true,
+      "outDir": "build",
+      "baseUrl": "src",
+    },
+    "include": ["src/**/*.ts", "node_modules/@faction/contracts-xsublimatio"],
+    "exclude": ["node_modules"]
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/core/QueueItemBus.spec.ts"],
+  "sourcesContent": ["import tap from 'tap';\nimport prisma, { destroyPrismaTest, startPrismaTest } from '../lib/prisma';\nimport QueueItemBus from './QueueItemBus';\n\ntap.test('Test onNewQueueItem', (t) => {\n  t.before(async () => {\n    await startPrismaTest();\n  });\n  t.teardown(async () => {\n    await destroyPrismaTest();\n  });\n  t.plan(1);\n  t.test('Should return hello world', async (t) => {\n    const item = { data: { tokenId: '0' } };\n    const bus = new QueueItemBus();\n    bus.on('newQueueItem', (queueItem) => {\n      t.match(item.data.tokenId, queueItem.tokenId);\n    });\n\n    await prisma.queue.create({ data: { tokenId: '0' } });\n  });\n});\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,iBAAgB;AAChB,oBAA2D;AAC3D,0BAAyB;AAEzB,mBAAI,KAAK,uBAAuB,CAAC,MAAM;AACrC,IAAE,OAAO,MAAY;AACnB,UAAM;AAAA;AAER,IAAE,SAAS,MAAY;AACrB,UAAM;AAAA;AAER,IAAE,KAAK;AACP,IAAE,KAAK,6BAA6B,CAAO,OAAM;AAC/C,UAAM,OAAO,EAAE,MAAM,EAAE,SAAS;AAChC,UAAM,MAAM,IAAI;AAChB,QAAI,GAAG,gBAAgB,CAAC,cAAc;AACpC,SAAE,MAAM,KAAK,KAAK,SAAS,UAAU;AAAA;AAGvC,UAAM,sBAAO,MAAM,OAAO,EAAE,MAAM,EAAE,SAAS;AAAA;AAAA;",
+  "names": []
+}

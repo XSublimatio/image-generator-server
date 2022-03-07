@@ -1,0 +1,70 @@
+{
+  "name": "image-generator-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "check:types": "tsc --noEmit",
+    "build": "esbuild-node-tsc",
+    "build:docker:prod": "docker build . -t my-fastify-app --build-arg APP_ENV=production",
+    "start": "node build",
+    "dev": "nodemon | pino-pretty --colorize",
+    "pretest": "npm run build",
+    "test": "NODE_ENV=test tap",
+    "test:watch": "NODE_ENV=test tap -w",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XSublimatio/image-generator-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/XSublimatio/image-generator-server/issues"
+  },
+  "homepage": "https://github.com/XSublimatio/image-generator-server#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.53.1",
+    "@faction-nfts/xsublimatio-smart-contracts": "^0.2.1",
+    "@prisma/client": "3.10.0",
+    "@sinclair/typebox": "^0.23.4",
+    "env-schema": "^3.5.2",
+    "ethers": "^5.5.4",
+    "fastify": "^3.27.2",
+    "fastify-now": "^2.5.2",
+    "git": "^0.1.5",
+    "prisma": "^3.10.0",
+    "queue-ts": "^0.1.0",
+    "sharp": "^0.30.2",
+    "systeminformation": "^5.11.5",
+    "tiny-typed-emitter": "^2.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@types/tap": "^15.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "esbuild": "^0.14.23",
+    "esbuild-node-tsc": "^1.8.3",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "nodemon": "^2.0.15",
+    "pino-pretty": "^7.5.1",
+    "prettier": "^2.5.1",
+    "tap": "^15.1.6",
+    "typescript": "~4.5"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.js": "eslint --cache --fix"
+  }
+}

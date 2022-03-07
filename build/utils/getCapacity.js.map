@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/utils/getCapacity.ts"],
+  "sourcesContent": ["import { VRAM_USAGE } from '../constants';\n\nconst getCapacity = () => {\n  const vram = Number(process.env.VRAM);\n\n  return Math.floor(vram / VRAM_USAGE);\n};\n\nexport default getCapacity;\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA,uBAA2B;AAE3B,MAAM,cAAc,MAAM;AACxB,QAAM,OAAO,OAAO,QAAQ,IAAI;AAEhC,SAAO,KAAK,MAAM,OAAO;AAAA;AAG3B,IAAO,sBAAQ;",
+  "names": []
+}

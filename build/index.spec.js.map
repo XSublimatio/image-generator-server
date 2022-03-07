@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.spec.ts"],
+  "sourcesContent": ["import { createServer } from './index';\nimport tap from 'tap';\n\ntap.only('Server', (t) => {\n  t.plan(1);\n  t.test('Should return server instance', async (t) => {\n    const server = await createServer();\n    t.match(typeof server, 'object');\n    await server.close();\n  });\n});\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,mBAA6B;AAC7B,iBAAgB;AAEhB,mBAAI,KAAK,UAAU,CAAC,MAAM;AACxB,IAAE,KAAK;AACP,IAAE,KAAK,iCAAiC,CAAO,OAAM;AACnD,UAAM,SAAS,MAAM;AACrB,OAAE,MAAM,OAAO,QAAQ;AACvB,UAAM,OAAO;AAAA;AAAA;",
+  "names": []
+}
