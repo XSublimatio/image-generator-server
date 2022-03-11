@@ -9,7 +9,7 @@
     "check:types": "tsc --noEmit",
     "build": "esbuild-node-tsc",
     "build:docker:prod": "docker build . -t my-fastify-app --build-arg APP_ENV=production",
-    "start": "node build",
+    "start": "npx prisma generate && node build",
     "dev": "nodemon | pino-pretty --colorize",
     "pretest": "npm run build",
     "test": "NODE_ENV=test tap",
