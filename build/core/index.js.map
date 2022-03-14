@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/core/index.ts"],
-  "sourcesContent": ["import ImageBus from './ImageBus';\nimport processImage from './processImage';\nimport QueueItemBus from './QueueItemBus';\n\nconst startCore = async () => {\n  const queueItemBus = new QueueItemBus();\n  const imageBus = new ImageBus();\n\n  queueItemBus.on('newQueueItem', (queueItem) => imageBus.feedNewQueueItem(queueItem));\n  imageBus.on('newImage', processImage);\n\n  await imageBus.start();\n};\n\nexport default startCore;\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA,sBAAqB;AACrB,0BAAyB;AACzB,0BAAyB;AAEzB,MAAM,YAAY,MAAY;AAC5B,QAAM,eAAe,IAAI;AACzB,QAAM,WAAW,IAAI;AAErB,eAAa,GAAG,gBAAgB,CAAC,cAAc,SAAS,iBAAiB;AACzE,WAAS,GAAG,YAAY;AAExB,QAAM,SAAS;AAAA;AAGjB,IAAO,eAAQ;",
-  "names": []
-}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/routes/index.spec.ts"],
-  "sourcesContent": ["import { FastifyInstance } from 'fastify';\nimport { createServer } from '../index';\nimport tap from 'tap';\n\nlet server: FastifyInstance;\ntap.test('GET /', (t) => {\n  t.before(async () => {\n    server = await createServer();\n  });\n  t.teardown(async () => {\n    await server.close();\n  });\n  t.plan(1);\n  t.test('Should return hello world', async (t) => {\n    const response = await server.inject({\n      method: 'GET',\n      path: '/',\n    });\n    t.match(response.statusCode, 200);\n    t.match(response.json(), { hello: 'world' });\n  });\n});\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,eAA6B;AAC7B,iBAAgB;AAEhB,IAAI;AACJ,mBAAI,KAAK,SAAS,CAAC,MAAM;AACvB,IAAE,OAAO,MAAY;AACnB,aAAS,MAAM;AAAA;AAEjB,IAAE,SAAS,MAAY;AACrB,UAAM,OAAO;AAAA;AAEf,IAAE,KAAK;AACP,IAAE,KAAK,6BAA6B,CAAO,OAAM;AAC/C,UAAM,WAAW,MAAM,OAAO,OAAO;AAAA,MACnC,QAAQ;AAAA,MACR,MAAM;AAAA;AAER,OAAE,MAAM,SAAS,YAAY;AAC7B,OAAE,MAAM,SAAS,QAAQ,EAAE,OAAO;AAAA;AAAA;",
-  "names": []
-}

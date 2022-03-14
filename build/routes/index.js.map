@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/routes/index.ts"],
-  "sourcesContent": ["import { NowRequestHandler } from 'fastify-now';\nimport { Type } from '@sinclair/typebox';\n\nexport const GET: NowRequestHandler = async function () {\n  return { hello: 'world' };\n};\n\nGET.opts = {\n  schema: {\n    response: {\n      200: Type.Object({\n        hello: Type.String(),\n      }),\n    },\n  },\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AACA,qBAAqB;AAEd,MAAM,MAAyB,WAAkB;AAAA;AACtD,WAAO,EAAE,OAAO;AAAA;AAAA;AAGlB,IAAI,OAAO;AAAA,EACT,QAAQ;AAAA,IACN,UAAU;AAAA,MACR,KAAK,oBAAK,OAAO;AAAA,QACf,OAAO,oBAAK;AAAA;AAAA;AAAA;AAAA;",
-  "names": []
-}

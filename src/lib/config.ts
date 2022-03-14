@@ -13,6 +13,7 @@ const ConfigSchema = Type.Object({
   API_HOST: Type.String(),
   API_PORT: Type.String(),
   VRAM: Type.Optional(Type.Number()),
+  S3_BUCKET_URL: Type.String(),
 });
 
 export type Config = Static<typeof ConfigSchema>;

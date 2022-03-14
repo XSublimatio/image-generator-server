@@ -1,3 +1,6 @@
 main/output/
 main/out/
 node_modules
+.nyc_output
+build
+.DS_Store
