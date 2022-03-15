@@ -7,7 +7,7 @@ type Get = NowRequestHandler<{
   Params: { tokenId: string };
 }>;
 
-type Response = {
+type SuccessfulResponse = {
   attributes: Array<object>;
   description: string;
   name: string;
@@ -16,11 +16,24 @@ type Response = {
   animation_url: string;
 };
 
-export const GET: Get = async function (req, res): Promise<Response> {
+type FailedResponse = {
+  success: boolean;
+  error: string;
+};
+
+export const GET: Get = async function (req, res): Promise<SuccessfulResponse | FailedResponse> {
   const { tokenId } = req.params;
 
-  // TODO: error handling with new version of `xsublimatio-smart-contracts`
-  const { category, name, seed, type } = getTokenFromId(tokenId);
+  let token;
+
+  try {
+    token = getTokenFromId(tokenId);
+  } catch (err) {
+    res.code(400);
+    return { success: false, error: err.toString() };
+  }
+
+  const { category, name, seed, type } = token;
 
   const attributes = [
     { trait_type: 'Category', value: category },
@@ -32,10 +45,9 @@ export const GET: Get = async function (req, res): Promise<Response> {
   const imageUrl = `${process.env.S3_BUCKET_URL}/${tokenId}.webp`;
   const animationUrl = `${process.env.S3_BUCKET_URL}/${tokenId}.mp4`;
 
-  await prisma.queue.create({ data: { tokenId } }).catch((err) => {
+  // We don't care about a failure here since it doesn't prevent a valid response
+  prisma.queue.create({ data: { tokenId } }).catch((err) => {
     console.log(`Prisma queue create failed with : ${err}`);
-    res.code(500);
-    return { success: false, error: 'Server Error' };
   });
 
   res.code(200);
