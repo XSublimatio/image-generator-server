@@ -2,6 +2,7 @@ import { NowRequestHandler } from 'fastify-now';
 import { Type } from '@sinclair/typebox';
 import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 import prisma from '../../../lib/prisma';
+import axios from 'axios';
 
 type Get = NowRequestHandler<{
   Params: { tokenId: string };
@@ -21,6 +22,38 @@ type FailedResponse = {
   error: string;
 };
 
+const tokenExists = async (tokenId: string): Promise<boolean> => {
+  return axios
+    .post(
+      process.env.NODE_RPC_URL,
+      {
+        jsonrpc: '2.0',
+        method: 'eth_call',
+        params: [
+          {
+            to: process.env.CONTRACT,
+            // 6352211e is the selector for `ownerOf(uint256)`
+            data: `0x6352211e${BigInt(tokenId).toString(16).padStart(64, '0')}`,
+          },
+          'latest',
+        ],
+        id: 1,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+    .then(({ data }) => {
+      // TODO: need to test if result only exists if the query does not revert
+      return !!data.result;
+    })
+    .catch(() => {
+      return false;
+    });
+};
+
 export const GET: Get = async function (req, res): Promise<SuccessfulResponse | FailedResponse> {
   const { tokenId } = req.params;
 
@@ -31,6 +64,11 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
   } catch (err) {
     res.code(400);
     return { success: false, error: err.toString() };
+  }
+
+  if (!tokenExists(tokenId)) {
+    res.code(400);
+    return { success: false, error: 'Token does not exist' };
   }
 
   const { category, name, seed, type } = token;
