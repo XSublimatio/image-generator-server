@@ -1,8 +1,8 @@
 import { NowRequestHandler } from 'fastify-now';
 import { Type } from '@sinclair/typebox';
-import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
+import { getMetadata } from '@faction-nfts/xsublimatio-smart-contracts';
 import prisma from '../../../lib/prisma';
-import axios from 'axios';
+import https from 'https';
 
 type Get = NowRequestHandler<{
   Params: { tokenId: string };
@@ -23,81 +23,67 @@ type FailedResponse = {
 };
 
 const tokenExists = async (tokenId: string): Promise<boolean> => {
-  return axios
-    .post(
-      process.env.NODE_RPC_URL,
+  const data = JSON.stringify({
+    jsonrpc: '2.0',
+    method: 'eth_call',
+    params: [
       {
-        jsonrpc: '2.0',
-        method: 'eth_call',
-        params: [
-          {
-            to: process.env.CONTRACT,
-            // 6352211e is the selector for `ownerOf(uint256)`
-            data: `0x6352211e${BigInt(tokenId).toString(16).padStart(64, '0')}`,
-          },
-          'latest',
-        ],
-        id: 1,
+        to: process.env.CONTRACT,
+        // 6352211e is the selector for `ownerOf(uint256)`
+        data: `0x6352211e${BigInt(tokenId).toString(16).padStart(64, '0')}`,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    .then(({ data }) => {
-      // TODO: need to test if result only exists if the query does not revert
-      return !!data.result;
-    })
-    .catch(() => {
-      return false;
+      'latest',
+    ],
+    id: 1,
+  });
+
+  const options = {
+    hostname: process.env.NODE_RPC_URL,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length,
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      res.on('data', (d) => {
+        // TODO: need to test if result only exists if the query does not revert
+        resolve(!!d.result);
+      });
     });
+
+    req.on('error', (error) => {
+      reject(error);
+    });
+
+    req.write(data);
+    req.end();
+  });
 };
 
 export const GET: Get = async function (req, res): Promise<SuccessfulResponse | FailedResponse> {
   const { tokenId } = req.params;
 
-  let token;
-
-  try {
-    token = getTokenFromId(tokenId);
-  } catch (err) {
-    res.code(400);
-    return { success: false, error: err.toString() };
-  }
-
-  if (!tokenExists(tokenId)) {
-    res.code(400);
-    return { success: false, error: 'Token does not exist' };
-  }
-
-  const { category, name, seed, type } = token;
-
-  const attributes = [
-    { trait_type: 'Category', value: category },
-    { trait_type: 'Name', value: name },
-    { trait_type: 'Seed', value: seed },
-    { trait_type: 'type', value: type.toString() },
-  ];
-
-  const imageUrl = `${process.env.S3_BUCKET_URL}/${tokenId}.webp`;
-  const animationUrl = `${process.env.S3_BUCKET_URL}/${tokenId}.mp4`;
+  // if (!tokenExists(tokenId)) {
+  //   res.code(400);
+  //   return { success: false, error: 'Token does not exist' };
+  // }
 
   // We don't care about a failure here since it doesn't prevent a valid response
   prisma.queue.create({ data: { tokenId } }).catch((err) => {
     console.log(`Prisma queue create failed with : ${err}`);
   });
 
-  res.code(200);
-
-  return {
-    attributes,
-    description: `An xSublimatio ${category}`,
-    name,
-    background_color: 'ffffff',
-    image: imageUrl,
-    animation_url: animationUrl,
-  };
+  try {
+    const metadata = getMetadata(tokenId, process.env.S3_BUCKET_URL);
+    res.code(200);
+    return metadata;
+  } catch (err) {
+    res.code(400);
+    return { success: false, error: err.toString() };
+  }
 };
 
 GET.opts = {

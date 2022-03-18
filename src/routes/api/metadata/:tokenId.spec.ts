@@ -20,16 +20,20 @@ tap.test('GET /api/metadata', (t) => {
     t.match(response.json(), {
       attributes: [
         { trait_type: 'Category', value: 'molecule' },
-        { trait_type: 'Name', value: 'Name' },
-        { trait_type: 'Seed', value: '11111' },
-        { trait_type: 'type', value: '1' },
+        { trait_type: 'Name', value: 'Water' },
+        {
+          trait_type: 'Seed',
+          value: '879278525543653493923200939433435425722167946518547744507993911317960893',
+        },
+        { trait_type: 'Type', value: '0' },
       ],
       description: `An xSublimatio molecule`,
-      name: 'https://localhost:5552/media/879278525543653493923200939433435425722167946518547744507993911317960893.jpeg',
+      name: 'Water',
       background_color: 'ffffff',
       image:
+        'https://localhost:5552/media/879278525543653493923200939433435425722167946518547744507993911317960893.webp',
+      animation_url:
         'https://localhost:5552/media/879278525543653493923200939433435425722167946518547744507993911317960893.mp4',
-      animation_url: '',
     });
   });
 });
