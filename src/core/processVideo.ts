@@ -1,8 +1,10 @@
 import prisma from '../lib/prisma';
 import { unlinkSync } from 'fs';
+import { uploadFile } from 'lib/uploadFile';
 
 const processVideo = async (tokenId: string, videoPath: string) => {
-  //TODO: Upload to S3 bucket
+  await uploadFile(videoPath);
+
   await prisma.queue.update({ where: { tokenId }, data: { vidDone: true } });
 
   try {
