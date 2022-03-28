@@ -14,26 +14,22 @@ tap.test('GET /api/metadata', (t) => {
   t.test('Should return metadata', async (t) => {
     const response = await server.inject({
       method: 'GET',
-      path: '/api/metadata/879278525543653493923200939433435425722167946518547744507993911317960893',
+      path: '/api/metadata/1234',
     });
     t.match(response.statusCode, 200);
     t.match(response.json(), {
       attributes: [
         { trait_type: 'Category', value: 'molecule' },
         { trait_type: 'Name', value: 'Water' },
-        {
-          trait_type: 'Seed',
-          value: '879278525543653493923200939433435425722167946518547744507993911317960893',
-        },
-        { trait_type: 'Type', value: '0' },
+        { trait_type: 'Seed', display_type: 'number', value: 1234 },
+        { trait_type: 'Type', display_type: 'number', value: 0 },
+        { trait_type: 'Formula', value: 'H2_O' },
       ],
       description: `An xSublimatio molecule`,
       name: 'Water',
       background_color: 'ffffff',
-      image:
-        'https://localhost:5552/media/879278525543653493923200939433435425722167946518547744507993911317960893.webp',
-      animation_url:
-        'https://localhost:5552/media/879278525543653493923200939433435425722167946518547744507993911317960893.mp4',
+      image: 'https://localhost:5552/media/1234.webp',
+      animation_url: 'https://localhost:5552/media/1234.mp4',
     });
   });
 });
