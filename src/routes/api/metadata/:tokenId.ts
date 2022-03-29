@@ -96,7 +96,7 @@ GET.opts = {
         attributes: Type.Array(
           Type.Object({
             trait_type: Type.String(),
-            display_type: Type.String().Optional,
+            display_type: Type.Optional(Type.String()),
             value: Type.Union([Type.String(), Type.Number()]),
           }),
         ),
