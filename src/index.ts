@@ -43,6 +43,8 @@ export async function startServer() {
 }
 
 if (process.env.NODE_ENV !== 'test') {
-  startCore();
+  if (!process.env.DISABLE_IMAGE_GENERATION) {
+    startCore();
+  }
   startServer();
 }

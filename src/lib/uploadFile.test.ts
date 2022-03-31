@@ -1,6 +1,5 @@
 import tap from 'tap';
 import fs from 'fs';
-import loadConfig from './config';
 import { uploadFile } from './uploadFile';
 
 tap.test('S3 Upload', async (t) => {

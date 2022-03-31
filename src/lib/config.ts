@@ -18,6 +18,7 @@ const ConfigSchema = Type.Object({
   AWS_BUCKET_NAME: Type.String(),
   AWS_ACCESS_KEY: Type.String(),
   AWS_SECRET_ACCESS_KEY: Type.String(),
+  DISABLE_IMAGE_GENERATION: Type.Boolean(),
 });
 
 export type Config = Static<typeof ConfigSchema>;
