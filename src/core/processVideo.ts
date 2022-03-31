@@ -1,6 +1,6 @@
 import prisma from '../lib/prisma';
 import { unlinkSync } from 'fs';
-import { uploadFile } from 'lib/uploadFile';
+import { uploadFile } from '../lib/uploadFile';
 
 const processVideo = async (tokenId: string, videoPath: string) => {
   await uploadFile(videoPath);

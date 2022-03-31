@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/lib/config.ts"],
-  "sourcesContent": ["import path from 'path';\nimport envSchema from 'env-schema';\nimport { Static, Type } from '@sinclair/typebox';\n\nexport enum NodeEnv {\n  development = 'development',\n  test = 'test',\n  production = 'production',\n}\n\nconst ConfigSchema = Type.Object({\n  NODE_ENV: Type.Enum(NodeEnv),\n  API_HOST: Type.String(),\n  API_PORT: Type.String(),\n  VRAM: Type.Optional(Type.Number()),\n});\n\nexport type Config = Static<typeof ConfigSchema>;\n\nexport default function loadConfig(): void {\n  const result = require('dotenv').config({\n    path: path.join(__dirname, `../../.env.${process.env.NODE_ENV ?? 'development'}`),\n  });\n\n  if (result.error) {\n    throw new Error(result.error);\n  }\n\n  envSchema({\n    data: result.parsed,\n    schema: Type.Strict(ConfigSchema),\n  });\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,kBAAiB;AACjB,wBAAsB;AACtB,qBAA6B;AAEtB,IAAK,UAAL,kBAAK,aAAL;AACL,4BAAc;AACd,qBAAO;AACP,2BAAa;AAHH;AAAA;AAMZ,MAAM,eAAe,oBAAK,OAAO;AAAA,EAC/B,UAAU,oBAAK,KAAK;AAAA,EACpB,UAAU,oBAAK;AAAA,EACf,UAAU,oBAAK;AAAA,EACf,MAAM,oBAAK,SAAS,oBAAK;AAAA;AAKZ,sBAA4B;AAnB3C;AAoBE,QAAM,SAAS,QAAQ,UAAU,OAAO;AAAA,IACtC,MAAM,oBAAK,KAAK,WAAW,cAAc,cAAQ,IAAI,aAAZ,YAAwB;AAAA;AAGnE,MAAI,OAAO,OAAO;AAChB,UAAM,IAAI,MAAM,OAAO;AAAA;AAGzB,iCAAU;AAAA,IACR,MAAM,OAAO;AAAA,IACb,QAAQ,oBAAK,OAAO;AAAA;AAAA;",
-  "names": []
-}

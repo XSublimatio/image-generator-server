@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/core/processImage.ts"],
-  "sourcesContent": ["import prisma from '../lib/prisma';\nimport sharp from 'sharp';\nimport { unlinkSync } from 'fs';\n\nconst tempDir = `${process.env.PWD}/temp`;\n\nconst processImage = async (tokenId: string, imagePath: string) => {\n  const filePath = `${tempDir}/${tokenId}.webp`;\n\n  await sharp(imagePath).webp().toFile(filePath);\n\n  //TODO: Upload to S3 bucket\n  await prisma.queue.update({ where: { tokenId }, data: { imgDone: true } });\n\n  try {\n    unlinkSync(filePath);\n    unlinkSync(imagePath);\n  } catch (e) {\n    console.error(e);\n  }\n};\n\nexport default processImage;\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAmB;AACnB,mBAAkB;AAClB,gBAA2B;AAE3B,MAAM,UAAU,GAAG,QAAQ,IAAI;AAE/B,MAAM,eAAe,CAAO,SAAiB,cAAsB;AACjE,QAAM,WAAW,GAAG,WAAW;AAE/B,QAAM,0BAAM,WAAW,OAAO,OAAO;AAGrC,QAAM,sBAAO,MAAM,OAAO,EAAE,OAAO,EAAE,WAAW,MAAM,EAAE,SAAS;AAEjE,MAAI;AACF,8BAAW;AACX,8BAAW;AAAA,WACJ,GAAP;AACA,YAAQ,MAAM;AAAA;AAAA;AAIlB,IAAO,uBAAQ;",
-  "names": []
-}

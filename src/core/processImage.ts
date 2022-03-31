@@ -1,7 +1,7 @@
 import prisma from '../lib/prisma';
 import sharp from 'sharp';
 import { unlinkSync } from 'fs';
-import { uploadFile } from 'lib/uploadFile';
+import { uploadFile } from '../lib/uploadFile';
 
 const tempDir = `${process.env.PWD}/temp`;
 

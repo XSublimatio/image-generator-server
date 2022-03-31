@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/routes/api/new-image.ts"],
-  "sourcesContent": ["import { NowRequestHandler } from 'fastify-now';\nimport { Type } from '@sinclair/typebox';\nimport prisma from '../../lib/prisma';\n\ntype Post = NowRequestHandler<{\n  Body: { tokenId: string };\n}>;\n\nexport const POST: Post = async function (req, res) {\n  const { tokenId } = req.body;\n\n  await prisma.queue.create({ data: { tokenId } });\n\n  res.code(202);\n\n  return { success: true };\n};\n\nPOST.opts = {\n  schema: {\n    body: {\n      tokenId: Type.String(),\n    },\n    response: {\n      202: Type.Object({\n        success: Type.Boolean({ default: true }),\n      }),\n      400: Type.Object({\n        success: Type.Boolean({ default: false }),\n      }),\n      500: Type.Object({\n        success: Type.Boolean({ default: false }),\n      }),\n    },\n  },\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AACA,qBAAqB;AACrB,oBAAmB;AAMZ,MAAM,OAAa,SAAgB,KAAK,KAAK;AAAA;AAClD,UAAM,EAAE,YAAY,IAAI;AAExB,UAAM,sBAAO,MAAM,OAAO,EAAE,MAAM,EAAE;AAEpC,QAAI,KAAK;AAET,WAAO,EAAE,SAAS;AAAA;AAAA;AAGpB,KAAK,OAAO;AAAA,EACV,QAAQ;AAAA,IACN,MAAM;AAAA,MACJ,SAAS,oBAAK;AAAA;AAAA,IAEhB,UAAU;AAAA,MACR,KAAK,oBAAK,OAAO;AAAA,QACf,SAAS,oBAAK,QAAQ,EAAE,SAAS;AAAA;AAAA,MAEnC,KAAK,oBAAK,OAAO;AAAA,QACf,SAAS,oBAAK,QAAQ,EAAE,SAAS;AAAA;AAAA,MAEnC,KAAK,oBAAK,OAAO;AAAA,QACf,SAAS,oBAAK,QAAQ,EAAE,SAAS;AAAA;AAAA;AAAA;AAAA;",
-  "names": []
-}

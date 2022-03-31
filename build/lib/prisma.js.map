@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/lib/prisma.ts"],
-  "sourcesContent": ["import { PrismaClient } from '@prisma/client';\nimport { execSync } from 'child_process';\nimport { join } from 'path';\nimport { v4 as uuidv4 } from 'uuid';\n\nconst prisma = new PrismaClient();\n\nexport default prisma;\n\nconst cwd = join(__dirname, '..', '..');\n\nexport const startPrismaTest = async () => {\n  const uuid = uuidv4();\n  await prisma.$disconnect();\n\n  process.env.DATABASE_URL = process.env.DATABASE_URL + `-test-${uuid}`;\n\n  const cwd = join(__dirname, '..', '..');\n  execSync('npx prisma db push --force-reset', {\n    cwd,\n    env: process.env,\n  });\n\n  await prisma.$connect();\n};\n\nexport const destroyPrismaTest = async () => {\n  prisma.$disconnect();\n};\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAA6B;AAC7B,2BAAyB;AACzB,kBAAqB;AACrB,kBAA6B;AAE7B,MAAM,SAAS,IAAI;AAEnB,IAAO,iBAAQ;AAEf,MAAM,MAAM,sBAAK,WAAW,MAAM;AAE3B,MAAM,kBAAkB,MAAY;AACzC,QAAM,OAAO;AACb,QAAM,OAAO;AAEb,UAAQ,IAAI,eAAe,QAAQ,IAAI,eAAe,SAAS;AAE/D,QAAM,OAAM,sBAAK,WAAW,MAAM;AAClC,qCAAS,oCAAoC;AAAA,IAC3C;AAAA,IACA,KAAK,QAAQ;AAAA;AAGf,QAAM,OAAO;AAAA;AAGR,MAAM,oBAAoB,MAAY;AAC3C,SAAO;AAAA;",
-  "names": []
-}

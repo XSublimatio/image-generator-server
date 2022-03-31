@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/routes/api/new-image.spec.ts"],
-  "sourcesContent": ["import { FastifyInstance } from 'fastify';\nimport { createServer } from '../../index';\nimport tap from 'tap';\nimport { destroyPrismaTest, startPrismaTest } from '../../lib/prisma';\n\nlet server: FastifyInstance;\ntap.test('POST /api/new-image', (t) => {\n  t.before(async () => {\n    await startPrismaTest();\n    server = await createServer();\n  });\n  t.teardown(async () => {\n    await destroyPrismaTest();\n    await server.close();\n  });\n  t.plan(1);\n  t.test('Should return 2', async (t) => {\n    const response = await server.inject({\n      method: 'POST',\n      path: '/api/new-image',\n      payload: {\n        tokenId: '123',\n      },\n    });\n    t.match(response.statusCode, 202);\n    t.match(response.json(), { success: true });\n  });\n});\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,eAA6B;AAC7B,iBAAgB;AAChB,oBAAmD;AAEnD,IAAI;AACJ,mBAAI,KAAK,uBAAuB,CAAC,MAAM;AACrC,IAAE,OAAO,MAAY;AACnB,UAAM;AACN,aAAS,MAAM;AAAA;AAEjB,IAAE,SAAS,MAAY;AACrB,UAAM;AACN,UAAM,OAAO;AAAA;AAEf,IAAE,KAAK;AACP,IAAE,KAAK,mBAAmB,CAAO,OAAM;AACrC,UAAM,WAAW,MAAM,OAAO,OAAO;AAAA,MACnC,QAAQ;AAAA,MACR,MAAM;AAAA,MACN,SAAS;AAAA,QACP,SAAS;AAAA;AAAA;AAGb,OAAE,MAAM,SAAS,YAAY;AAC7B,OAAE,MAAM,SAAS,QAAQ,EAAE,SAAS;AAAA;AAAA;",
-  "names": []
-}

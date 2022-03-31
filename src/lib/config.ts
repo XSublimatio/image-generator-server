@@ -13,6 +13,7 @@ const ConfigSchema = Type.Object({
   API_HOST: Type.String(),
   API_PORT: Type.String(),
   VRAM: Type.Optional(Type.Number()),
+  AWS_BUCKET_URL: Type.String(),
   AWS_BUCKET_REGION: Type.String(),
   AWS_BUCKET_NAME: Type.String(),
   AWS_ACCESS_KEY: Type.String(),

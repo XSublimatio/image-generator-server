@@ -5,7 +5,7 @@ import { BigNumber } from 'ethers';
 import { exec } from 'child_process';
 import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 import { TypedEmitter } from 'tiny-typed-emitter';
-import getCapacity from 'utils/getCapacity';
+import getCapacity from '../utils/getCapacity';
 
 interface IVideoBus {
   newVideo: (tokenId: string, imagePath: string) => void;
@@ -44,7 +44,7 @@ class VideoBus extends TypedEmitter<IVideoBus> {
       await exec(`
         ${process.env.PWD}/img-generator/main --seed=${token.seed} --molecule=${processedMoleculeName} --video --filename=${queueItem.tokenId}
       `);
-
+      console.log('emitting videbus');
       this.emit(
         'newVideo',
         queueItem.tokenId,

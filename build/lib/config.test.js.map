@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../src/lib/config.test.ts"],
-  "sourcesContent": ["import tap from 'tap';\nimport loadConfig from './config';\n\ntap.test('Config', (t) => {\n  loadConfig();\n  t.end();\n});\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA,iBAAgB;AAChB,oBAAuB;AAEvB,mBAAI,KAAK,UAAU,CAAC,MAAM;AACxB;AACA,IAAE;AAAA;",
-  "names": []
-}

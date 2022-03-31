@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/constants.ts"],
-  "sourcesContent": ["export const VRAM_USAGE = 2000;\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAO,MAAM,aAAa;",
-  "names": []
-}
