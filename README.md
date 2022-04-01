@@ -18,7 +18,8 @@ AWS_BUCKET_REGION=notrelevant
 AWS_BUCKET_NAME=notrelevant
 AWS_ACCESS_KEY=notrelevant
 AWS_SECRET_ACCESS_KEY=notrelevant
-NODE_RPC_URL=http://localhost:7545 <- your local ganache instance 
+NODE_RPC_URL=http://localhost:7545 <- your local ganache instance
+DATABASE_URL=PostgreSQL database URL
 ```
 
 
