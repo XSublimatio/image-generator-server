@@ -1,6 +1,6 @@
 import { NowRequestHandler } from 'fastify-now';
 import { Type } from '@sinclair/typebox';
-import { getMetadata } from '@faction-nfts/xsublimatio-smart-contracts';
+import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 import prisma from '../../../lib/prisma';
 import https from 'https';
 
@@ -77,7 +77,7 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
   });
 
   try {
-    const metadata = getMetadata(tokenId, process.env.S3_BUCKET_URL);
+    const { metadata } = getTokenFromId(tokenId, process.env.S3_BUCKET_URL);
     res.code(200);
     return metadata;
   } catch (err) {

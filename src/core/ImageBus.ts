@@ -33,15 +33,11 @@ class ImageBus extends TypedEmitter<IImageBus> {
   }
 
   private async createImg(queueItem: Queue) {
-    const bnTokenId = BigNumber.from(queueItem.tokenId);
-    const token = getTokenFromId(bnTokenId);
-    const processedMoleculeName = processName(token.name);
-
     try {
       await exec(`
-        ${process.env.PWD}/img-generator/main --seed=${token.seed} --molecule=${processedMoleculeName} --filename=${queueItem.tokenId} --sync
+        ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone
       `);
-
+      console.log('emitting imagebus');
       this.emit(
         'newImage',
         queueItem.tokenId,

@@ -36,19 +36,15 @@ class VideoBus extends TypedEmitter<IVideoBus> {
   }
 
   private async createImg(queueItem: Queue) {
-    const bnTokenId = BigNumber.from(queueItem.tokenId);
-    const token = getTokenFromId(bnTokenId);
-    const processedMoleculeName = processName(token.name);
-
     try {
       await exec(`
-        ${process.env.PWD}/img-generator/main --seed=${token.seed} --molecule=${processedMoleculeName} --video --filename=${queueItem.tokenId}
+        ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate
       `);
-      console.log('emitting videbus');
+      console.log('emitting videobus');
       this.emit(
         'newVideo',
         queueItem.tokenId,
-        `${process.env.PWD}/build/output/${queueItem.tokenId}.mp4`,
+        `${process.env.PWD}/build/output/${queueItem.tokenId}.webm`,
       );
     } catch (e) {
       prisma.queue.update({
