@@ -30,14 +30,13 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.53.1",
     "@faction-nfts/xsublimatio-smart-contracts": "^0.4.1",
-    "@prisma/client": "3.10.0",
+    "@prisma/client": "^3.12.0",
     "@sinclair/typebox": "^0.23.4",
     "env-schema": "^3.5.2",
     "ethers": "^5.6.0",
     "fastify": "^3.27.2",
     "fastify-now": "^2.5.2",
     "git": "^0.1.5",
-    "prisma": "^3.10.0",
     "queue-ts": "^0.1.0",
     "sharp": "^0.30.2",
     "systeminformation": "^5.11.5",
@@ -45,6 +44,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "prisma": "^3.12.0",
     "@types/node": "^17.0.21",
     "@types/tap": "^15.0.6",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
