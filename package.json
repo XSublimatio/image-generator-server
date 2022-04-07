@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --fix",
     "check:types": "tsc --noEmit",
     "build": "tsc",
-    "docker:run": "APP_ENV=development npx prisma generate && npx prisma migrate deploy && yarn build && yarn start",
+    "docker:run": "APP_ENV=development prisma generate && prisma migrate deploy && yarn build && yarn start",
     "build:docker:prod": "docker build . -t my-fastify-app --build-arg APP_ENV=production",
     "start": "node build",
     "dev": "nodemon | pino-pretty --colorize",
