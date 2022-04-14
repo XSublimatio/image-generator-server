@@ -6,6 +6,7 @@ import startCore from './core';
 
 // Load env vars
 import loadConfig from './lib/config';
+import fastifyCors from 'fastify-cors';
 loadConfig();
 
 export async function createServer() {
@@ -13,6 +14,11 @@ export async function createServer() {
     logger: {
       level: process.env.LOG_LEVEL,
     },
+  });
+
+  server.register(fastifyCors, {
+    origin: '*',
+    methods: ['GET', 'POST'],
   });
 
   server.register(now, {
