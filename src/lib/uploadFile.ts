@@ -1,38 +1,42 @@
-import { S3, S3Client, PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
-import { createReadStream } from 'fs';
-import { basename } from 'path';
 import loadConfig from './config';
+import cloudinary, { UploadApiResponse } from 'cloudinary';
 
 loadConfig();
 
-const region = process.env.AWS_BUCKET_REGION;
-const bucketName = process.env.AWS_BUCKET_NAME;
-const accessKey = process.env.AWS_ACCESS_KEY;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-/**
- * S3 Bucket is expected to be publically accessible
- * IAM access should only allow the creation of objectss
- */
+type MediaType = 'video' | 'image';
 
-const s3Client = new S3Client({
-  region: region,
-  credentials: {
-    accessKeyId: accessKey,
-    secretAccessKey: secretAccessKey,
-  },
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+cloudinary.v2.config({
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
+  secure: true,
 });
 
-export const uploadFile = async (filePath: string) => {
-  const fileStream = createReadStream(filePath);
+export const uploadFile = (filePath: string, tokenId: string, mediaType: MediaType) => {
+  const publicId = `faction/xsublimatio/${mediaType}/${tokenId}.webm`;
 
-  const uploadParams = {
-    Key: basename(filePath),
-    Bucket: bucketName,
-    Body: fileStream,
-    ACL: 'public-read',
-  } as PutObjectCommandInput;
-
-  const command = new PutObjectCommand(uploadParams);
-
-  await s3Client.send(command);
+  return upload(filePath, publicId, mediaType);
 };
+
+const upload = (filePath: string, publicId: string, mediaType): Promise<UploadApiResponse> =>
+  new Promise((resolve, reject) => {
+    cloudinary.v2.uploader.upload_large(
+      filePath,
+      {
+        resource_type: mediaType,
+        public_id: publicId.replace(/\.[^/.]+$/, ''),
+      },
+      (err, res) => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(res);
+      },
+    );
+    // .end(buffer);
+  });

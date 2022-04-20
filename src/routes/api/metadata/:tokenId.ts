@@ -77,7 +77,13 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
   });
 
   try {
-    const { metadata } = getTokenFromId(tokenId, process.env.S3_BUCKET_URL);
+    const { metadata } = getTokenFromId(
+      tokenId,
+      process.env.IMAGE_URI,
+      process.env.VIDEO_URI,
+      'webp',
+      'webm',
+    );
     res.code(200);
     return metadata;
   } catch (err) {

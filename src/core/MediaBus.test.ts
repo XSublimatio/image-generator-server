@@ -1,19 +1,19 @@
 import tap from 'tap';
-import QueueItemBus from '../core/QueueItemBus';
+import QueueItemBus from './QueueItemBus';
 import prisma, { destroyPrismaTest, startPrismaTest } from '../lib/prisma';
-import ImageBus from './ImageBus';
 import { Queue } from '@prisma/client';
+import MediaBus from './MediaBus';
 
 let queueItemBus: QueueItemBus;
-let imageBus: ImageBus;
+let mediaBus: MediaBus;
 let feedNewQueueItem: (queueItem: Queue) => void;
 
 tap.test('Test onNewQueueItem', (t) => {
   t.before(async () => {
     await startPrismaTest();
     queueItemBus = new QueueItemBus();
-    imageBus = new ImageBus();
-    feedNewQueueItem = (queueItem) => imageBus.feedNewQueueItem(queueItem);
+    mediaBus = new MediaBus();
+    feedNewQueueItem = (queueItem) => mediaBus.feedNewQueueItem(queueItem);
 
     queueItemBus.on('newQueueItem', feedNewQueueItem);
   });
@@ -26,9 +26,9 @@ tap.test('Test onNewQueueItem', (t) => {
     const tokenId = '1223321123';
     await prisma.queue.create({ data: { tokenId } });
 
-    imageBus.on('newImage', (receivedTokenId, imagePath) => {
+    mediaBus.on('newMedia', (receivedTokenId, imagePath) => {
       t.equal(tokenId, receivedTokenId);
-      t.equal(`${process.env.PWD}/main/application.linux64/${tokenId}.png`, imagePath);
+      t.equal(`${process.env.PWD}/img-generator/output/${tokenId}`, imagePath);
     });
   });
 });

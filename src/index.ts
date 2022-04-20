@@ -49,7 +49,9 @@ export async function startServer() {
 }
 
 if (process.env.NODE_ENV !== 'test') {
-  if (!process.env.DISABLE_IMAGE_GENERATION) {
+  const imageGenerationDisabled = process.env.DISABLE_IMAGE_GENERATION === 'true';
+
+  if (!imageGenerationDisabled) {
     startCore();
   }
   startServer();

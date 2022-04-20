@@ -1,19 +1,17 @@
 import prisma from '../lib/prisma';
 import queueTs from 'queue-ts';
 import { Queue } from '@prisma/client';
-import { BigNumber } from 'ethers';
-import { exec } from 'child_process';
-import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
+import { exec, execSync } from 'child_process';
 import { TypedEmitter } from 'tiny-typed-emitter';
 import getCapacity from '../utils/getCapacity';
 
-interface IVideoBus {
-  newVideo: (tokenId: string, imagePath: string) => void;
+interface IMediaBus {
+  newMedia: (tokenId: string, mediaPath: string) => void;
 }
 
 const capacity = getCapacity() - 1;
 
-class VideoBus extends TypedEmitter<IVideoBus> {
+class MediaBus extends TypedEmitter<IMediaBus> {
   queue = new queueTs.Queue(capacity);
 
   constructor() {
@@ -23,7 +21,7 @@ class VideoBus extends TypedEmitter<IVideoBus> {
   }
 
   public async start() {
-    const queueItems = (await prisma.queue.findMany()) || [];
+    const queueItems = (await prisma.queue.findMany({ where: { mediaDone: false } })) || [];
     queueItems.forEach(this.addToQueue);
   }
 
@@ -37,14 +35,14 @@ class VideoBus extends TypedEmitter<IVideoBus> {
 
   private async createImg(queueItem: Queue) {
     try {
-      await exec(`
+      execSync(`
         ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate
       `);
-      console.log('emitting videobus');
+
       this.emit(
-        'newVideo',
+        'newMedia',
         queueItem.tokenId,
-        `${process.env.PWD}/build/output/${queueItem.tokenId}.webm`,
+        `${process.env.PWD}/img-generator/output/${queueItem.tokenId}`,
       );
     } catch (e) {
       prisma.queue.update({
@@ -55,7 +53,7 @@ class VideoBus extends TypedEmitter<IVideoBus> {
   }
 }
 
-export default VideoBus;
+export default MediaBus;
 
 //TODO: This does not account for drug names, as they've not been included in the generator.
-const processName = (name: string) => name.toLowerCase().replace('-', '').split(' ')[0];
+// const processName = (name: string) => name.toLowerCase().replace('-', '').split(' ')[0];

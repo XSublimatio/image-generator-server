@@ -1,23 +1,26 @@
-import ImageBus from './ImageBus';
-import processImage from './processImage';
-import processVideo from './processVideo';
 import QueueItemBus from './QueueItemBus';
-import VideoBus from './VideoBus';
+import MediaBus from './MediaBus';
+import processMedia from './processMedia';
 
 const startCore = async () => {
   const queueItemBus = new QueueItemBus();
-  const imageBus = new ImageBus();
-  const videoBus = new VideoBus();
+  const mediaBus = new MediaBus();
 
   queueItemBus.on('newQueueItem', (queueItem) => {
-    imageBus.feedNewQueueItem(queueItem);
-    videoBus.feedNewQueueItem(queueItem);
+    mediaBus.feedNewQueueItem(queueItem);
   });
 
-  imageBus.on('newImage', processImage);
-  videoBus.on('newVideo', processVideo);
+  mediaBus.on('newMedia', (...args) => {
+    try {
+      console.log('pre-media');
+      processMedia(...args);
+    } catch (e) {
+      console.error(e);
+      console.error('failed');
+    }
+  });
 
-  await imageBus.start();
+  await mediaBus.start();
 };
 
 export default startCore;
