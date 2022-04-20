@@ -38,5 +38,4 @@ const upload = (filePath: string, publicId: string, mediaType): Promise<UploadAp
         resolve(res);
       },
     );
-    // .end(buffer);
   });

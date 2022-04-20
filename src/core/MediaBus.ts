@@ -36,7 +36,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
   private async createImg(queueItem: Queue) {
     try {
       execSync(`
-        ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate
+        DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate
       `);
 
       this.emit(
@@ -54,6 +54,3 @@ class MediaBus extends TypedEmitter<IMediaBus> {
 }
 
 export default MediaBus;
-
-//TODO: This does not account for drug names, as they've not been included in the generator.
-// const processName = (name: string) => name.toLowerCase().replace('-', '').split(' ')[0];
