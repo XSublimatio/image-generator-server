@@ -128,6 +128,7 @@ GET.opts = {
         image: Type.String(),
         animation_url: Type.String(),
         placeholder_image: Type.String(),
+        artist: Type.String(),
       }),
       400: Type.Object({
         success: Type.Boolean({ default: false }),
