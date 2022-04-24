@@ -36,7 +36,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
   private async createImg(queueItem: Queue) {
     try {
       execSync(`
-        DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate
+        DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate --ffmpegPath=/usr/bin --ffmpegThreads=2
       `);
 
       this.emit(
