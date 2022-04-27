@@ -22,7 +22,9 @@ class QueueItemBus extends TypedEmitter<ITypedEventBus> {
   async emitPreviousEvents() {
     const items = await prisma.queue.findMany({ where: { mediaDone: false } });
 
-    items.forEach((item) => this.emit('newQueueItem', item));
+    if (items) {
+      items.forEach((item) => this.emit('newQueueItem', item));
+    }
   }
 }
 
