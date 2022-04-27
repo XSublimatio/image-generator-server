@@ -1,15 +1,14 @@
 import prisma from '../lib/prisma';
 import queueTs from 'queue-ts';
 import { Queue } from '@prisma/client';
-import { exec, execSync } from 'child_process';
+import { execSync } from 'child_process';
 import { TypedEmitter } from 'tiny-typed-emitter';
-import getCapacity from '../utils/getCapacity';
 
 interface IMediaBus {
   newMedia: (tokenId: string, mediaPath: string) => void;
 }
 
-const capacity = getCapacity() - 1;
+const capacity = 1;
 
 class MediaBus extends TypedEmitter<IMediaBus> {
   queue = new queueTs.Queue(capacity);
@@ -18,11 +17,6 @@ class MediaBus extends TypedEmitter<IMediaBus> {
     super();
 
     this.addToQueue = this.addToQueue.bind(this);
-  }
-
-  public async start() {
-    const queueItems = (await prisma.queue.findMany({ where: { mediaDone: false } })) || [];
-    queueItems.forEach(this.addToQueue);
   }
 
   public feedNewQueueItem(queueItem: Queue) {

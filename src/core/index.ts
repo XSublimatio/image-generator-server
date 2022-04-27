@@ -19,7 +19,6 @@ const startCore = async () => {
     }
   });
 
-  await mediaBus.start();
   await queueItemBus.emitPreviousEvents();
 };
 
