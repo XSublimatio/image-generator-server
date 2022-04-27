@@ -12,7 +12,6 @@ const startCore = async () => {
 
   mediaBus.on('newMedia', (...args) => {
     try {
-      console.log('pre-media');
       processMedia(...args);
     } catch (e) {
       console.error(e);
@@ -21,6 +20,7 @@ const startCore = async () => {
   });
 
   await mediaBus.start();
+  await queueItemBus.emitPreviousEvents();
 };
 
 export default startCore;
