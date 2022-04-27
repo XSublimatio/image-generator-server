@@ -1,8 +1,11 @@
 import prisma from '../lib/prisma';
 import queueTs from 'queue-ts';
 import { Queue } from '@prisma/client';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
 import { TypedEmitter } from 'tiny-typed-emitter';
+import { promisify } from 'util';
+
+const execCommand = promisify(exec);
 
 interface IMediaBus {
   newMedia: (tokenId: string, mediaPath: string) => void;
@@ -29,7 +32,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
 
   private async createImg(queueItem: Queue) {
     try {
-      execSync(`
+      await execCommand(`
         DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate --ffmpegPath=/usr/bin --ffmpegThreads=2
       `);
 
