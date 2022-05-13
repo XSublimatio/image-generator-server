@@ -4,6 +4,11 @@ import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 import prisma from '../../../lib/prisma';
 import https from 'https';
 
+const DRUG_PLACEHOLDER =
+  'https://res.cloudinary.com/faction/image/upload/v1652413962/faction/xsublimatio/placeholders/PH_DRUG_bdsvaw.jpg';
+const MOLECULE_PLACEHOLDER =
+  'https://res.cloudinary.com/faction/image/upload/v1652413962/faction/xsublimatio/placeholders/PH_MOL_baxnpo.jpg';
+
 type Get = NowRequestHandler<{
   Params: { tokenId: string };
 }>;
@@ -14,6 +19,7 @@ type SuccessfulResponse = {
   name: string;
   background_color: string;
   image: string;
+  placeholder_image: string;
   animation_url: string;
 };
 
@@ -77,15 +83,25 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
   });
 
   try {
-    const { metadata } = getTokenFromId(
+    const { metadata, category } = getTokenFromId(
       tokenId,
       process.env.IMAGE_URI,
       process.env.VIDEO_URI,
       'webp',
       'webm',
     );
+
+    const placeholder =
+      (category === 'molecule' && MOLECULE_PLACEHOLDER) ||
+      (category === 'drug' && DRUG_PLACEHOLDER);
+
+    const metadataResponse = {
+      ...metadata,
+      placeholder_image: placeholder,
+    } as SuccessfulResponse;
+
     res.code(200);
-    return metadata;
+    return metadataResponse;
   } catch (err) {
     res.code(400);
     return { success: false, error: err.toString() };
@@ -111,6 +127,7 @@ GET.opts = {
         background_color: Type.String(),
         image: Type.String(),
         animation_url: Type.String(),
+        placeholder_image: Type.String(),
       }),
       400: Type.Object({
         success: Type.Boolean({ default: false }),
