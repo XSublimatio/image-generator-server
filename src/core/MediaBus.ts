@@ -33,7 +33,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
   private async createImg(queueItem: Queue) {
     try {
       await execCommand(`
-        DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --exitWhenDone --animate --ffmpegPath=/usr/bin --ffmpegThreads=2
+        DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --ffmpegPath=/usr/bin --ffmpegThreads=2
       `);
 
       this.emit(

@@ -44,7 +44,8 @@ const tokenExists = async (tokenId: string): Promise<boolean> => {
   });
 
   const options = {
-    hostname: process.env.NODE_RPC_URL,
+    hostname: process.env.NODE_RPC_HOSTNAME,
+    path: process.env.NODE_RPC_PATH,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -53,10 +54,15 @@ const tokenExists = async (tokenId: string): Promise<boolean> => {
   };
 
   return new Promise((resolve, reject) => {
+    let returnData = '';
+
     const req = https.request(options, (res) => {
-      res.on('data', (d) => {
-        // TODO: need to test if result only exists if the query does not revert
-        resolve(!!d.result);
+      res.on('data', (chunk) => {
+        returnData += chunk;
+      });
+
+      res.on('end', () => {
+        resolve(JSON.parse(returnData).result !== '0x');
       });
     });
 
@@ -72,15 +78,10 @@ const tokenExists = async (tokenId: string): Promise<boolean> => {
 export const GET: Get = async function (req, res): Promise<SuccessfulResponse | FailedResponse> {
   const { tokenId } = req.params;
 
-  // if (!tokenExists(tokenId)) {
-  //   res.code(400);
-  //   return { success: false, error: 'Token does not exist' };
-  // }
-
-  // We don't care about a failure here since it doesn't prevent a valid response
-  prisma.queue.create({ data: { tokenId } }).catch((err) => {
-    console.log(`Prisma queue create failed with : ${err}`);
-  });
+  if (!(await tokenExists(tokenId))) {
+    res.code(400);
+    return { success: false, error: 'Token does not exist' };
+  }
 
   try {
     const { metadata, category } = getTokenFromId(
@@ -91,14 +92,19 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
       'webm',
     );
 
+    // We don't care about a failure here since it doesn't prevent a valid response
+    prisma.queue.create({ data: { tokenId } }).catch((err) => {
+      console.log(`Prisma queue create failed with : ${err}`);
+    });
+
     const placeholder =
       (category === 'molecule' && MOLECULE_PLACEHOLDER) ||
       (category === 'drug' && DRUG_PLACEHOLDER);
 
-    const metadataResponse = {
-      ...metadata,
-      placeholder_image: placeholder,
-    } as SuccessfulResponse;
+    const metadataResponse = Object.assign(
+      { placeholder_image: placeholder },
+      metadata,
+    ) as SuccessfulResponse;
 
     res.code(200);
     return metadataResponse;

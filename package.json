@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/XSublimatio/image-generator-server#readme",
   "dependencies": {
-    "@faction-nfts/xsublimatio-smart-contracts": "^0.7.6",
+    "@faction-nfts/xsublimatio-smart-contracts": "^0.7.8",
     "@prisma/client": "^3.12.0",
     "@sinclair/typebox": "^0.23.4",
     "cloudinary": "^1.29.1",

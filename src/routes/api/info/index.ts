@@ -9,6 +9,7 @@ type SuccessfulResponse = {
   external_link: string;
   seller_fee_basis_points: number;
   fee_recipient: string;
+  artist: string;
 };
 
 type FailedResponse = {
