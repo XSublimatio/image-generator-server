@@ -16,6 +16,8 @@ class QueueItemBus extends TypedEmitter<ITypedEventBus> {
       if (params.model === 'Queue' && params.action === 'create') {
         this.emit('newQueueItem', res);
       }
+
+      return res;
     });
   }
 
