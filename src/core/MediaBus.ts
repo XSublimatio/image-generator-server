@@ -4,6 +4,7 @@ import { Queue } from '@prisma/client';
 import { exec } from 'child_process';
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { promisify } from 'util';
+import getExecutionTime from 'utils/getExecutionTime';
 
 const execCommand = promisify(exec);
 
@@ -12,6 +13,8 @@ interface IMediaBus {
 }
 
 const capacity = 1;
+
+export const queueItems: Queue[] = [];
 
 class MediaBus extends TypedEmitter<IMediaBus> {
   queue = new queueTs.Queue(capacity);
@@ -27,14 +30,25 @@ class MediaBus extends TypedEmitter<IMediaBus> {
   }
 
   private addToQueue(queueItem: Queue) {
+    queueItems.push(queueItem);
+
     this.queue.add(() => this.createImg(queueItem));
   }
 
   private async createImg(queueItem: Queue) {
     try {
+      const startTime = getExecutionTime();
+
       await execCommand(`
         DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --ffmpegPath=/usr/bin --ffmpegThreads=2
       `);
+
+      const endTime = getExecutionTime(startTime);
+
+      await prisma.queue.update({
+        where: { id: queueItem.id },
+        data: { duration: Math.round(endTime) },
+      });
 
       this.emit(
         'newMedia',
@@ -46,6 +60,8 @@ class MediaBus extends TypedEmitter<IMediaBus> {
         where: { id: queueItem.id },
         data: { failed: true },
       });
+    } finally {
+      queueItems.shift();
     }
   }
 }
