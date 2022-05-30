@@ -15,11 +15,11 @@ class QueueItemBus extends TypedEmitter<ITypedEventBus> {
       const isCreatingQueueItem = params.model === 'Queue' && params.action === 'create';
 
       if (isCreatingQueueItem) {
-        const args = params.args as Queue;
+        const args = params.args.data as Queue;
 
         args.type = getType(args);
 
-        params.args = args;
+        params.args.data = args;
       }
 
       const res = (await next(params)) as Queue;
