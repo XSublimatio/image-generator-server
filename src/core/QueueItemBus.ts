@@ -1,7 +1,7 @@
 import { Queue } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { TypedEmitter } from 'tiny-typed-emitter';
-import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts/dist/types';
+import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 
 interface ITypedEventBus {
   newQueueItem: (queueItem: Queue) => void;

@@ -4,20 +4,20 @@ import { Queue } from '@prisma/client';
 import { exec } from 'child_process';
 import { TypedEmitter } from 'tiny-typed-emitter';
 import { promisify } from 'util';
-import getExecutionTime from 'utils/getExecutionTime';
+import getExecutionTime from '../utils/getExecutionTime';
 
 const execCommand = promisify(exec);
 
 interface IMediaBus {
   newMedia: (tokenId: string, mediaPath: string) => void;
+  newQueueItem: (queueIndex: number, queueItem: Queue) => void;
 }
 
 const capacity = 1;
 
-export const queueItems: Queue[] = [];
-
 class MediaBus extends TypedEmitter<IMediaBus> {
   queue = new queueTs.Queue(capacity);
+  queueItems: Queue[] = [];
 
   constructor() {
     super();
@@ -30,9 +30,12 @@ class MediaBus extends TypedEmitter<IMediaBus> {
   }
 
   private addToQueue(queueItem: Queue) {
-    queueItems.push(queueItem);
+    const queueIndex = this.queueItems.length;
 
+    this.queueItems.push(queueItem);
     this.queue.add(() => this.createImg(queueItem));
+
+    this.emit('newQueueItem', queueIndex, queueItem);
   }
 
   private async createImg(queueItem: Queue) {
@@ -61,7 +64,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
         data: { failed: true },
       });
     } finally {
-      queueItems.shift();
+      this.queueItems.shift();
     }
   }
 }
