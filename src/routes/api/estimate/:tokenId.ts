@@ -48,9 +48,11 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
       };
     }
   } catch (e) {
+    console.error(e);
+
     res.code(500);
     return {
-      error: e.toString(),
+      error: 'Failed getting estimate',
       success: false,
     };
   }
