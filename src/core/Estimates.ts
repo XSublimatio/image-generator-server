@@ -1,4 +1,5 @@
 import { Queue, Type, type Type as TypeType } from '@prisma/client';
+import getExecutionTime from 'utils/getExecutionTime';
 import prisma from '../lib/prisma';
 import MediaBus from './MediaBus';
 import { UnfinishedResponse } from './QueueItemGetter';
@@ -19,7 +20,14 @@ class Estimates {
     const upcomingTypes = upcomingQueueItems.map((queueItem) => queueItem.type);
     const upcomingEstimates = upcomingTypes.map((type) => this.estimates[type]);
 
-    return upcomingEstimates.reduce((a, b) => a + b, 0);
+    let estimate = upcomingEstimates.reduce((a, b) => a + b, 0);
+    if (this.mediaBus.currentItemStartTime) {
+      const runTime = getExecutionTime(this.mediaBus.currentItemStartTime);
+
+      estimate -= runTime;
+    }
+
+    return estimate;
   }
 
   async task() {

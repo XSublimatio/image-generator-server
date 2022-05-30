@@ -18,6 +18,7 @@ const capacity = 1;
 class MediaBus extends TypedEmitter<IMediaBus> {
   queue = new queueTs.Queue(capacity);
   queueItems: Queue[] = [];
+  currentItemStartTime: number | null = null;
 
   constructor() {
     super();
@@ -41,6 +42,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
   private async createImg(queueItem: Queue) {
     try {
       const startTime = getExecutionTime();
+      this.currentItemStartTime = getExecutionTime();
 
       await execCommand(`
         DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --ffmpegPath=/usr/bin --ffmpegThreads=2
@@ -64,6 +66,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
         data: { failed: true },
       });
     } finally {
+      this.currentItemStartTime = null;
       this.queueItems.shift();
     }
   }
