@@ -15,7 +15,7 @@ const startCore = async () => {
   queueItemGetter = new QueueItemGetter(mediaBus);
   estimates = new Estimates(mediaBus);
 
-  await estimates.task();
+  await estimates.trackEstimates();
 
   queueItemBus.on('newQueueItem', (queueItem) => {
     mediaBus.feedNewQueueItem(queueItem);
