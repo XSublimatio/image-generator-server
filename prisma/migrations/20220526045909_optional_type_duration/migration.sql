@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Queue" ALTER COLUMN "duration" DROP NOT NULL,
-ALTER COLUMN "type" DROP NOT NULL;
