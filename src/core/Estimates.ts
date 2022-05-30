@@ -1,5 +1,5 @@
 import { Queue, Type, type Type as TypeType } from '@prisma/client';
-import getExecutionTime from 'utils/getExecutionTime';
+import getExecutionTime from '../utils/getExecutionTime';
 import prisma from '../lib/prisma';
 import MediaBus from './MediaBus';
 import { UnfinishedResponse } from './QueueItemGetter';
