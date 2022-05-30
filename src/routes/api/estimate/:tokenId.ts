@@ -76,6 +76,7 @@ GET.opts = {
 const verifyTokenId = (tokenId: string) => {
   try {
     getTokenFromId(tokenId);
+    return true;
   } catch (e) {
     return false;
   }
