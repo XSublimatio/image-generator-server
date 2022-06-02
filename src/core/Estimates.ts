@@ -40,7 +40,7 @@ class Estimates {
 
       if (!filteredItems.length) continue;
 
-      const durationArray = queueItems.map((queueItem) => queueItem.duration);
+      const durationArray = filteredItems.map((queueItem) => queueItem.duration);
       const lowest = Math.min(...durationArray);
       const highest = Math.max(...durationArray);
       const average = durationArray.reduce((a, b) => a + b, 0) / filteredItems.length;
