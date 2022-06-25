@@ -1,6 +1,7 @@
 import { Queue } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { TypedEmitter } from 'tiny-typed-emitter';
+import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 
 interface ITypedEventBus {
   newQueueItem: (queueItem: Queue) => void;
@@ -11,9 +12,19 @@ class QueueItemBus extends TypedEmitter<ITypedEventBus> {
     super();
 
     prisma.$use(async (params, next) => {
-      const res = await next(params);
+      const isCreatingQueueItem = params.model === 'Queue' && params.action === 'create';
 
-      if (params.model === 'Queue' && params.action === 'create') {
+      if (isCreatingQueueItem) {
+        const args = params.args.data as Queue;
+
+        args.type = getType(args);
+
+        params.args.data = args;
+      }
+
+      const res = (await next(params)) as Queue;
+
+      if (isCreatingQueueItem) {
         this.emit('newQueueItem', res);
       }
 
@@ -31,3 +42,12 @@ class QueueItemBus extends TypedEmitter<ITypedEventBus> {
 }
 
 export default QueueItemBus;
+
+function getType(queue: Queue): Queue['type'] {
+  const category = getTokenFromId(queue.tokenId).category;
+
+  if (category === 'drug') return 'DRUG';
+  else if (category === 'molecule') return 'MOLECULE';
+
+  return undefined;
+}

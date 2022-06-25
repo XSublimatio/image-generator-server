@@ -2,7 +2,7 @@ import { NowRequestHandler } from 'fastify-now';
 import { Type } from '@sinclair/typebox';
 import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 import prisma from '../../../lib/prisma';
-import https from 'https';
+import tokenExists from '../../../utils/tokenExists';
 
 const DRUG_PLACEHOLDER =
   'https://res.cloudinary.com/faction/image/upload/v1652413962/faction/xsublimatio/placeholders/PH_DRUG_bdsvaw.jpg';
@@ -26,53 +26,6 @@ type SuccessfulResponse = {
 type FailedResponse = {
   success: boolean;
   error: string;
-};
-
-const tokenExists = async (tokenId: string): Promise<boolean> => {
-  const data = JSON.stringify({
-    jsonrpc: '2.0',
-    method: 'eth_call',
-    params: [
-      {
-        to: process.env.CONTRACT,
-        // 6352211e is the selector for `ownerOf(uint256)`
-        data: `0x6352211e${BigInt(tokenId).toString(16).padStart(64, '0')}`,
-      },
-      'latest',
-    ],
-    id: 1,
-  });
-
-  const options = {
-    hostname: process.env.NODE_RPC_HOSTNAME,
-    path: process.env.NODE_RPC_PATH,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Content-Length': data.length,
-    },
-  };
-
-  return new Promise((resolve, reject) => {
-    let returnData = '';
-
-    const req = https.request(options, (res) => {
-      res.on('data', (chunk) => {
-        returnData += chunk;
-      });
-
-      res.on('end', () => {
-        resolve(JSON.parse(returnData).result !== '0x');
-      });
-    });
-
-    req.on('error', (error) => {
-      reject(error);
-    });
-
-    req.write(data);
-    req.end();
-  });
 };
 
 export const GET: Get = async function (req, res): Promise<SuccessfulResponse | FailedResponse> {

@@ -48,11 +48,13 @@ export async function startServer() {
   }
 }
 
-if (process.env.NODE_ENV !== 'test') {
-  const imageGenerationDisabled = process.env.DISABLE_IMAGE_GENERATION === 'true';
+(async () => {
+  if (process.env.NODE_ENV !== 'test') {
+    const imageGenerationDisabled = process.env.DISABLE_IMAGE_GENERATION === 'true';
 
-  if (!imageGenerationDisabled) {
-    startCore();
+    if (!imageGenerationDisabled) {
+      await startCore();
+    }
+    startServer();
   }
-  startServer();
-}
+})();
