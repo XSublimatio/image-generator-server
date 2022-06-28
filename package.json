@@ -29,9 +29,12 @@
   },
   "homepage": "https://github.com/XSublimatio/image-generator-server#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.118.0",
     "@faction-nfts/xsublimatio-smart-contracts": "^0.7.9",
     "@prisma/client": "^3.14.0",
     "@sinclair/typebox": "^0.23.4",
+    "@types/sharp": "^0.30.4",
+    "await-event-emitter": "^2.0.2",
     "cloudinary": "^1.29.1",
     "env-schema": "^3.5.2",
     "ethers": "^5.6.0",
@@ -40,6 +43,7 @@
     "fastify-now": "^2.5.2",
     "git": "^0.1.5",
     "queue-ts": "^0.1.0",
+    "sharp": "^0.30.7",
     "systeminformation": "^5.11.5",
     "tiny-typed-emitter": "^2.1.0",
     "uuid": "^8.3.2"

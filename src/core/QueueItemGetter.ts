@@ -1,6 +1,6 @@
 import { Queue } from '@prisma/client';
 import prisma from '../lib/prisma';
-import MediaBus from './MediaBus';
+import MediaBus, { IMediaBus } from './MediaBus';
 
 export enum Status {
   FINISHED,
@@ -62,7 +62,7 @@ class QueueItemGetter {
     return await new Promise((resolve, reject) => {
       let success: boolean | null = null;
 
-      this.mediaBus.on('newQueueItem', (queueIndex, queueItem) => {
+      this.mediaBus.on('newQueueItem', ({ queueIndex, queueItem }: IMediaBus['newQueueItem']) => {
         if (queueItem.tokenId !== tokenId && success !== null) return;
 
         success = true;

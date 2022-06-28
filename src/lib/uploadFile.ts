@@ -1,41 +1,37 @@
 import loadConfig from './config';
-import cloudinary, { UploadApiResponse } from 'cloudinary';
+import { S3Client, PutObjectCommandInput, PutObjectCommand } from '@aws-sdk/client-s3';
+import { FileExtension } from 'core/processMedia';
 
 loadConfig();
 
-type MediaType = 'video' | 'image';
-
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-const apiKey = process.env.CLOUDINARY_API_KEY;
-const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-cloudinary.v2.config({
-  cloud_name: cloudName,
-  api_key: apiKey,
-  api_secret: apiSecret,
-  secure: true,
+const s3Client = new S3Client({
+  region: 'eu-west-1',
 });
 
-export const uploadFile = (filePath: string, tokenId: string, mediaType: MediaType) => {
-  const publicId = `faction/xsublimatio/${mediaType}/${tokenId}.webm`;
+interface IUploadFile {
+  tokenId: string;
+  resolution?: {
+    width: number;
+    height: number;
+  };
+  mediaType: FileExtension['type'];
+  buffer: Buffer;
+}
 
-  return upload(filePath, publicId, mediaType);
+export const uploadFile = ({ resolution, tokenId, mediaType, buffer }: IUploadFile) => {
+  const resolutionPrefix = resolution ? `${resolution.width}x${resolution.height}` : 'original';
+  const filename = tokenId;
+  const extension = mediaType === 'video' ? 'webm' : 'webp';
+
+  const Key = `${mediaType}/${resolutionPrefix}/${filename}.${extension}`;
+
+  const uploadParams = {
+    Key,
+    Body: buffer,
+    Bucket: 'xsublimation',
+  } as PutObjectCommandInput;
+
+  const command = new PutObjectCommand(uploadParams);
+
+  return s3Client.send(command);
 };
-
-const upload = (filePath: string, publicId: string, mediaType): Promise<UploadApiResponse> =>
-  new Promise((resolve, reject) => {
-    cloudinary.v2.uploader.upload_large(
-      filePath,
-      {
-        resource_type: mediaType,
-        public_id: publicId.replace(/\.[^/.]+$/, ''),
-      },
-      (err, res) => {
-        if (err) {
-          return reject(err);
-        }
-
-        resolve(res);
-      },
-    );
-  });
