@@ -27,7 +27,7 @@ class Estimates {
       estimate -= runTime;
     }
 
-    return estimate;
+    return estimate > 0 ? estimate : 10;
   }
 
   async task() {
