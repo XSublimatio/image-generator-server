@@ -1,7 +1,7 @@
 import { NowRequestHandler } from 'fastify-now';
 import { Type } from '@sinclair/typebox';
 import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
-import tokenExists from '../../../utils/tokenExists';
+import tokenExists from '../../../utils/efficientTokenExists';
 import { estimates, queueItemGetter } from '../../../core';
 import { Status } from '../../../core/QueueItemGetter';
 
