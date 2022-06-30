@@ -2,7 +2,7 @@ import { NowRequestHandler } from 'fastify-now';
 import { Type } from '@sinclair/typebox';
 import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 import prisma from '../../../lib/prisma';
-import tokenExists from '../../../utils/tokenExists';
+import tokenExists from '../../../utils/efficientTokenExists';
 
 const DRUG_PLACEHOLDER =
   'https://res.cloudinary.com/faction/image/upload/v1652413962/faction/xsublimatio/placeholders/PH_DRUG_bdsvaw.jpg';
@@ -31,11 +31,6 @@ type FailedResponse = {
 export const GET: Get = async function (req, res): Promise<SuccessfulResponse | FailedResponse> {
   const { tokenId } = req.params;
 
-  if (!(await tokenExists(tokenId))) {
-    res.code(400);
-    return { success: false, error: 'Token does not exist' };
-  }
-
   try {
     const { metadata, category } = getTokenFromId(
       tokenId,
@@ -45,6 +40,10 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
       'webm',
     );
 
+    if (!(await tokenExists(tokenId))) {
+      res.code(400);
+      return { success: false, error: 'Token does not exist' };
+    }
     // We don't care about a failure here since it doesn't prevent a valid response
     prisma.queue.create({ data: { tokenId } }).catch((err) => {
       console.log(`Prisma queue create failed with : ${err}`);
@@ -54,10 +53,11 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
       (category === 'molecule' && MOLECULE_PLACEHOLDER) ||
       (category === 'drug' && DRUG_PLACEHOLDER);
 
-    const metadataResponse = Object.assign(
-      { placeholder_image: placeholder },
-      metadata,
-    ) as SuccessfulResponse;
+    const metadataResponse = {
+      placeholder_image: placeholder,
+      thumbnail: `https://xsublimation.s3.amazonaws.com/image/300x300/${tokenId}.webp`,
+      ...metadata,
+    } as SuccessfulResponse;
 
     res.code(200);
     return metadataResponse;
@@ -88,6 +88,7 @@ GET.opts = {
         animation_url: Type.String(),
         placeholder_image: Type.String(),
         artist: Type.String(),
+        thumbnail: Type.String(),
       }),
       400: Type.Object({
         success: Type.Boolean({ default: false }),
