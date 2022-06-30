@@ -21,6 +21,7 @@ type SuccessfulResponse = {
   image: string;
   placeholder_image: string;
   animation_url: string;
+  artist: string;
 };
 
 type FailedResponse = {
@@ -44,6 +45,7 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
       res.code(400);
       return { success: false, error: 'Token does not exist' };
     }
+
     // We don't care about a failure here since it doesn't prevent a valid response
     prisma.queue.create({ data: { tokenId } }).catch((err) => {
       console.log(`Prisma queue create failed with : ${err}`);
