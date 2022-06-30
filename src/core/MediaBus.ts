@@ -2,20 +2,20 @@ import prisma from '../lib/prisma';
 import queueTs from 'queue-ts';
 import { Queue } from '@prisma/client';
 import { exec } from 'child_process';
-import { TypedEmitter } from 'tiny-typed-emitter';
 import { promisify } from 'util';
 import getExecutionTime from '../utils/getExecutionTime';
+import AwaitEventEmitter from 'await-event-emitter';
 
 const execCommand = promisify(exec);
 
-interface IMediaBus {
-  newMedia: (tokenId: string, mediaPath: string) => void;
-  newQueueItem: (queueIndex: number, queueItem: Queue) => void;
+export interface IMediaBus {
+  newMedia: { tokenId: string; mediaPath: string };
+  newQueueItem: { queueIndex: number; queueItem: Queue };
 }
 
 const capacity = 1;
 
-class MediaBus extends TypedEmitter<IMediaBus> {
+class MediaBus extends AwaitEventEmitter {
   queue = new queueTs.Queue(capacity);
   queueItems: Queue[] = [];
   currentItemStartTime: number | null = null;
@@ -36,7 +36,7 @@ class MediaBus extends TypedEmitter<IMediaBus> {
     this.queueItems.push(queueItem);
     this.queue.add(() => this.createImg(queueItem));
 
-    this.emit('newQueueItem', queueIndex, queueItem);
+    this.emit('newQueueItem', { queueIndex, queueItem } as IMediaBus['newQueueItem']);
   }
 
   private async createImg(queueItem: Queue) {
@@ -55,11 +55,10 @@ class MediaBus extends TypedEmitter<IMediaBus> {
         data: { duration: Math.round(endTime) },
       });
 
-      this.emit(
-        'newMedia',
-        queueItem.tokenId,
-        `${process.env.PWD}/img-generator/output/${queueItem.tokenId}`,
-      );
+      await this.emit('newMedia', {
+        tokenId: queueItem.tokenId,
+        mediaPath: `${process.env.PWD}/img-generator/output/${queueItem.tokenId}`,
+      } as IMediaBus['newMedia']);
     } catch (e) {
       prisma.queue.update({
         where: { id: queueItem.id },

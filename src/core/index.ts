@@ -3,6 +3,7 @@ import MediaBus from './MediaBus';
 import processMedia from './processMedia';
 import Estimates from './Estimates';
 import QueueItemGetter from './QueueItemGetter';
+import { IMediaBus } from './MediaBus';
 
 export let queueItemBus: QueueItemBus;
 export let mediaBus: MediaBus;
@@ -21,9 +22,9 @@ const startCore = async () => {
     mediaBus.feedNewQueueItem(queueItem);
   });
 
-  mediaBus.on('newMedia', (...args) => {
+  mediaBus.on('newMedia', ({ tokenId, mediaPath }: IMediaBus['newMedia']) => {
     try {
-      processMedia(...args);
+      return processMedia(tokenId, mediaPath);
     } catch (e) {
       console.error(e);
       console.error('failed');

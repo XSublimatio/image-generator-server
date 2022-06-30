@@ -1,10 +1,6 @@
 import tap from 'tap';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import { uploadFile } from './uploadFile';
-
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-const apiKey = process.env.CLOUDINARY_API_KEY;
-const apiSecret = process.env.API_SECRET;
 
 tap.test('S3 Upload', async (t) => {
   const filePath = './.temp/test';
@@ -12,7 +8,14 @@ tap.test('S3 Upload', async (t) => {
   fs.closeSync(fs.openSync(filePath, 'w'));
 
   try {
-    await uploadFile(filePath, '123', 'image');
+    const buffer = readFileSync(filePath);
+
+    await uploadFile({
+      resolution: { width: 0, height: 0 },
+      tokenId: '0',
+      mediaType: 'video',
+      buffer,
+    });
   } catch (e) {
     console.error(e);
     t.fail(e);
