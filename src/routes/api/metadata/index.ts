@@ -10,6 +10,7 @@ type SuccessfulResponse = {
   seller_fee_basis_points: number;
   fee_recipient: string;
   artist: string;
+  asset_generator_torrent_hash: string;
 };
 
 type FailedResponse = {
@@ -39,6 +40,7 @@ GET.opts = {
         seller_fee_basis_points: Type.Number(),
         fee_recipient: Type.String(),
         artist: Type.String(),
+        asset_generator_torrent_hash: Type.String(),
       }),
       400: Type.Object({
         success: Type.Boolean({ default: false }),

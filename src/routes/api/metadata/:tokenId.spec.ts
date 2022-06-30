@@ -14,7 +14,7 @@ tap.test('GET /api/metadata', (t) => {
   t.test('Should return metadata', async (t) => {
     const response = await server.inject({
       method: 'GET',
-      path: '/api/metadata/9500336667313372540169390661494672859605720546372424896104851258867200347492',
+      path: '/api/metadata/1358983431866274230341974005',
     });
     t.match(response.statusCode, 200);
     t.match(response.json(), {
@@ -36,10 +36,8 @@ tap.test('GET /api/metadata', (t) => {
       description: `An xSublimatio molecule`,
       name: 'Lactuside A',
       background_color: 'ffffff',
-      image:
-        'https://localhost:5552/media/9500336667313372540169390661494672859605720546372424896104851258867200347492.png',
-      animation_url:
-        'https://localhost:5552/media/9500336667313372540169390661494672859605720546372424896104851258867200347492.webm',
+      image: 'https://localhost:5552/media/1358983431866274230341974005.png',
+      animation_url: 'https://localhost:5552/media/1358983431866274230341974005.webm',
     });
   });
 });
