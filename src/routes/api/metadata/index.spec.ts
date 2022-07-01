@@ -22,11 +22,11 @@ tap.test('GET /api/info', (t) => {
       name: 'xSublimatio',
       description: `A digital drug experience as NFTs`,
       image: 'https://localhost:5552/media/xSublimatio.png',
-      external_link: 'faction.art/xsublimatio',
+      external_link: 'faction.art/project/xsublimatio',
       seller_fee_basis_points: 0,
       fee_recipient: '',
       artist: 'Pierre Pauze',
-      asset_generator_torrent_hash: '',
+      asset_generator_hash: '',
     });
   });
 });
