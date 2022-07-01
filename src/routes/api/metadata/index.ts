@@ -10,7 +10,7 @@ type SuccessfulResponse = {
   seller_fee_basis_points: number;
   fee_recipient: string;
   artist: string;
-  asset_generator_torrent_hash: string;
+  asset_generator_hash: string;
 };
 
 type FailedResponse = {
@@ -23,7 +23,12 @@ export const GET: NowRequestHandler = async function (
   res,
 ): Promise<SuccessfulResponse | FailedResponse> {
   res.code(200);
-  return getContractMetadata(process.env.IMAGE_URI, 'webp');
+  return getContractMetadata(
+    process.env.IMAGE_URI,
+    'webp',
+    100,
+    '0x9fB847a01bb934c383DdA1C9dA3Bc6f4C6271EC4',
+  );
 };
 
 GET.opts = {
@@ -40,7 +45,7 @@ GET.opts = {
         seller_fee_basis_points: Type.Number(),
         fee_recipient: Type.String(),
         artist: Type.String(),
-        asset_generator_torrent_hash: Type.String(),
+        asset_generator_hash: Type.String(),
       }),
       400: Type.Object({
         success: Type.Boolean({ default: false }),
