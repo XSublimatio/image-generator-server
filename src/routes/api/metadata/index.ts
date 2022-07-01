@@ -26,8 +26,8 @@ export const GET: NowRequestHandler = async function (
   return getContractMetadata(
     process.env.IMAGE_URI,
     'webp',
-    100,
-    '0x9fB847a01bb934c383DdA1C9dA3Bc6f4C6271EC4',
+    parseInt(process.env.FEE_BASIS_POINTS ?? '0'),
+    process.env.MAINNET_CONTRACT,
   );
 };
 

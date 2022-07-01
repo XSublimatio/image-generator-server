@@ -19,6 +19,16 @@ const ConfigSchema = Type.Object({
   IMAGE_URI: Type.Optional(Type.String()),
   VIDEO_URI: Type.Optional(Type.String()),
   DISABLE_IMAGE_GENERATION: Type.Boolean(),
+  FEE_BASIS_POINTS: Type.Optional(Type.Number()),
+  MAINNET_CONTRACT: Type.String(),
+  TESTNET_CONTRACT: Type.String(),
+  MAINNET_NODE_RPC_HOSTNAME: Type.String(),
+  MAINNET_NODE_RPC_PATH: Type.String(),
+  TESTNET_NODE_RPC_HOSTNAME: Type.String(),
+  TESTNET_NODE_RPC_PATH: Type.String(),
+  LOG_LEVEL: Type.String(),
+  PWD: Type.String(),
+  DATABASE_URL: Type.String(),
 });
 
 export type Config = Static<typeof ConfigSchema>;

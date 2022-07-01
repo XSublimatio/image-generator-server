@@ -1,12 +1,19 @@
 import https from 'https';
 
-const tokenExists = async (tokenId: string): Promise<boolean> => {
+const tokenExists = async (
+  tokenId: string,
+  contract: string,
+  hostname: string,
+  path: string,
+): Promise<boolean> => {
+  if (!contract) return false;
+
   const data = JSON.stringify({
     jsonrpc: '2.0',
     method: 'eth_call',
     params: [
       {
-        to: process.env.CONTRACT,
+        to: contract,
         // 6352211e is the selector for `ownerOf(uint256)`
         data: `0x6352211e${BigInt(tokenId).toString(16).padStart(64, '0')}`,
       },
@@ -16,8 +23,8 @@ const tokenExists = async (tokenId: string): Promise<boolean> => {
   });
 
   const options = {
-    hostname: process.env.NODE_RPC_HOSTNAME,
-    path: process.env.NODE_RPC_PATH,
+    hostname,
+    path,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
