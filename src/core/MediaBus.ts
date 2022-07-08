@@ -5,6 +5,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import getExecutionTime from '../utils/getExecutionTime';
 import AwaitEventEmitter from 'await-event-emitter';
+import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts/dist/types';
 
 const execCommand = promisify(exec);
 
@@ -43,6 +44,12 @@ class MediaBus extends AwaitEventEmitter {
     try {
       const startTime = getExecutionTime();
       this.currentItemStartTime = getExecutionTime();
+
+      //artwork
+      const { globalType } = getTokenFromId(queueItem.tokenId);
+      if (globalType === 76) {
+        throw new Error('Minting of drug disabled');
+      }
 
       await execCommand(`
         DISPLAY=:1 ${process.env.PWD}/img-generator/main --tokenId=${queueItem.tokenId} --ffmpegPath=/usr/bin --ffmpegThreads=2
