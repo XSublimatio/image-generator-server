@@ -26,6 +26,7 @@ const ConfigSchema = Type.Object({
   MAINNET_NODE_RPC_PATH: Type.String(),
   TESTNET_NODE_RPC_HOSTNAME: Type.String(),
   TESTNET_NODE_RPC_PATH: Type.String(),
+  PROCEEDS_DESTINATION: Type.String(),
   LOG_LEVEL: Type.String(),
   PWD: Type.String(),
   DATABASE_URL: Type.String(),
