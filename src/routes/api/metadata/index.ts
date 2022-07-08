@@ -27,7 +27,7 @@ export const GET: NowRequestHandler = async function (
     process.env.IMAGE_URI,
     'webp',
     parseInt(process.env.FEE_BASIS_POINTS ?? '0'),
-    process.env.MAINNET_CONTRACT,
+    process.env.PROCEEDS_DESTINATION,
   );
 };
 

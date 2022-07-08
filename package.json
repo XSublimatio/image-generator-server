@@ -30,7 +30,7 @@
   "homepage": "https://github.com/XSublimatio/image-generator-server#readme",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.118.0",
-    "@faction-nfts/xsublimatio-smart-contracts": "^1.1.0",
+    "@faction-nfts/xsublimatio-smart-contracts": "^1.3.1",
     "@prisma/client": "^3.14.0",
     "@sinclair/typebox": "^0.23.4",
     "@types/sharp": "^0.30.4",
