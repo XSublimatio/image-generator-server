@@ -46,9 +46,13 @@ class MediaBus extends AwaitEventEmitter {
       this.currentItemStartTime = getExecutionTime();
 
       //artwork
-      const { globalType } = getTokenFromId(queueItem.tokenId);
+      const { globalType, category } = getTokenFromId(queueItem.tokenId);
       if (globalType === 76) {
         throw new Error('Minting of drug disabled');
+      }
+
+      if (category === 'drug') {
+        throw new Error('all drug minting disabled');
       }
 
       await execCommand(`
