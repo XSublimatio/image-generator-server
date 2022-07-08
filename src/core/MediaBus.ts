@@ -5,7 +5,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import getExecutionTime from '../utils/getExecutionTime';
 import AwaitEventEmitter from 'await-event-emitter';
-import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts/dist/types';
+import { getTokenFromId } from '@faction-nfts/xsublimatio-smart-contracts';
 
 const execCommand = promisify(exec);
 
