@@ -2,7 +2,7 @@ import https from 'https';
 
 const pokeOpenSea = async (tokenId: string, contract: string): Promise<boolean> => {
   const options = {
-    hostname: 'https://api.opensea.io',
+    hostname: 'api.opensea.io',
     path: `/api/v1/asset/${contract}/${tokenId}?force_update=true`,
     method: 'GET',
     headers: {

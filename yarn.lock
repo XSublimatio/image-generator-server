@@ -1642,10 +1642,10 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.0"
 
-"@faction-nfts/xsublimatio-smart-contracts@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@faction-nfts/xsublimatio-smart-contracts/-/xsublimatio-smart-contracts-1.3.1.tgz#73ce011b7555b4bd23debf006375cc4c92723567"
-  integrity sha512-762TRNk9AsYBXxXor2D3uA4b/tIffdD7PAmNLhVYL4KcogyI5gKQsmjQffmBsYTPtttVH3y/MpkKcmTFoghWaw==
+"@faction-nfts/xsublimatio-smart-contracts@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@faction-nfts/xsublimatio-smart-contracts/-/xsublimatio-smart-contracts-1.3.3.tgz#938855ae294c64c00e0bb5137c0f98a9e28709ae"
+  integrity sha512-rGENMAKVZi02e4hRxkBm2b9Vc56fA1M42r5uAG399NbNdRooiy8XpzjS4ZTAi2uGFxd/+RSFNL9/C1RZtS/l1Q==
 
 "@fastify/ajv-compiler@^1.0.0":
   version "1.1.0"

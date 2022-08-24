@@ -39,6 +39,7 @@ export const GET: Get = async function (req, res): Promise<SuccessfulResponse | 
       process.env.VIDEO_URI,
       'webp',
       'webm',
+      'https://faction.art/artwork/xsublimatio',
     );
 
     if (!(await tokenExists(tokenId))) {
