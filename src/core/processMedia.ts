@@ -2,7 +2,7 @@ import prisma from '../lib/prisma';
 import { readFileSync, unlinkSync } from 'fs';
 import { uploadFile } from '../lib/uploadFile';
 import resizeImage from '../utils/resizeImage';
-import pokeOpenSea from '../utils/pokeOpenSea';
+// import pokeOpenSea from '../utils/pokeOpenSea';
 import convertImageToWebp from '../utils/convertImageToWebp';
 
 export interface FileExtension {
@@ -59,9 +59,9 @@ const processMedia = async (tokenId: string, mediaPath: string) => {
 
       await unlinkSync(filePath);
 
-      await pokeOpenSea(tokenId, process.env.MAINNET_CONTRACT).catch((err) => {
-        console.log(`Failed to poke OpenSea for token ${tokenId} : ${err}`);
-      });
+      // await pokeOpenSea(tokenId, process.env.MAINNET_CONTRACT).catch((err) => {
+      //   console.log(`Failed to poke OpenSea for token ${tokenId} : ${err}`);
+      // });
     }
 
     await prisma.queue.update({ where: { tokenId }, data: { mediaDone: true } });
